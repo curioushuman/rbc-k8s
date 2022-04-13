@@ -1,0 +1,25 @@
+{{- if .Values.storageClass.create -}}
+apiVersion: {{ template "rbc.storageClassApiVersion" }}
+kind: StorageClass
+metadata:
+  name: {{ template "rbc.storageClassName" . }}
+  labels:
+    {{- include "rbc.labels" . | nindent 4 }}
+  {{- with .Values.storageClass.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- if .Values.storageClass.defaultClass }}
+    storageclass.kubernetes.io/is-default-class: "true"
+{{- end }}
+provisioner: {{ template "rbc.storageClassProvisioner" . }}
+allowVolumeExpansion: {{ template "rbc.storageClassVolumeExpansion" . }}
+volumeBindingMode: {{ template "rbc.storageClassVolumeBinding" . }}
+reclaimPolicy: {{ template "rbc.storageClassReclaimPolicy" . }}
+{{- if .Values.parameters }}
+parameters:
+  {{- range $key, $value := .Values.storageClass.parameters }}
+  {{ $key }}: {{ $value }}
+  {{- end }}
+{{- end }}
+{{- end }}

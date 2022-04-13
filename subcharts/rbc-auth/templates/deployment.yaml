@@ -1,0 +1,3 @@
+{{- include "rbc-lib.deployment" (list . "rbc-auth.deployment") -}}
+{{- define "rbc-auth.deployment" -}}
+{{- end -}}

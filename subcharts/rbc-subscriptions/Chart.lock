@@ -1,0 +1,9 @@
+dependencies:
+- name: rbc-lib
+  repository: file://../../rbc-lib
+  version: 0.1.2
+- name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.1.3
+digest: sha256:63cfacdfb806db2378bdb0c9def90608530c48e024318ddf190e623a58f02062
+generated: "2022-04-01T13:56:08.667474+11:00"

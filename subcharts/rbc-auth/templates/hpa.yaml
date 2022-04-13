@@ -1,0 +1,5 @@
+{{- if .Values.autoscaling.enabled }}
+{{- include "rbc-lib.hpa" (list . "rbc-auth.hpa") -}}
+{{- end }}
+{{- define "rbc-auth.hpa" -}}
+{{- end -}}
