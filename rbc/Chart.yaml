@@ -2,25 +2,13 @@ apiVersion: v2
 name: rbc
 description: An umbrella chart for the RbC ecosystem.
 type: application
-version: 0.2.1
+version: 0.3.1
 dependencies:
-  - name: rbc-auth
-    repository: "file://../subcharts/rbc-auth"
-    version: ~0.2.1
+  - name: rbc-api
+    repository: "file://../subcharts/rbc-api"
+    version: ~0.1.1
     tags:
-      - auth
-      - members
+      - identity
+      - access
+      - user
       - rbc
-  - name: rbc-subscriptions
-    repository: "file://../subcharts/rbc-subscriptions"
-    version: ~0.2.1
-    tags:
-      - subscriptions
-      - members
-      - rbc
-  - name: nats
-    repository: https://nats-io.github.io/k8s/helm/charts/
-    version: ~0.14.2
-    tags:
-      - communication
-      - nats

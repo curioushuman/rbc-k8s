@@ -9,14 +9,6 @@ global:
 tags:
   rbc: true
 
-nats:
-  auth:
-    enabled: false
-  logging:
-    debug: true
-    trace: true
-    connectErrorReports: true
-
 # TODO - get this working using a relevant provisioner
 storageClass:
   # Specifies whether a storage class should be created
@@ -54,20 +46,13 @@ ingress:
   hosts:
     - host: rbc.dev
       paths:
-        - path: /api/auth/?(.*)
+        - path: /api/?(.*)
           pathType: Prefix
           backend:
               service:
-                name: rbc-auth
+                name: rbc-api
                 port:
                   number: 3000
-        - path: /api/subscriptions/?(.*)
-          pathType: Prefix
-          backend:
-              service:
-                name: rbc-subscriptions
-                port:
-                  number: 3001
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

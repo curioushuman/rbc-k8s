@@ -1,3 +1,0 @@
-{{- include "rbc-lib.deployment" (list . "rbc-subscriptions.deployment") -}}
-{{- define "rbc-subscriptions.deployment" -}}
-{{- end -}}

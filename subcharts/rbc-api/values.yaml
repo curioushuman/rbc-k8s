@@ -12,25 +12,25 @@ replicaCount: 1
 
 # DB config for app
 # If no DB please replace with empty object {}
-database:
-  type: "mongodb"
-  port: "27017"
-  name: "rbc-auth"
+database: {}
+  # type: "mongodb"
+  # port: "27017"
+  # name: "rbc-auth"
 
 # Overriding DB values for mongodb
 # TODO - pull sc-db dynamically from umbrella
 # * NOTE: storageClass must be set to "" to use default
-mongodb:
-  global:
-    storageClass: ""
-  auth:
-    enabled: false
+# mongodb:
+#   global:
+#     storageClass: ""
+#   auth:
+#     enabled: false
   # service:
   #   port: 27017
 
 
 image:
-  repository: curioushuman/rbc-auth
+  repository: curioushuman/rbc-api
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -66,31 +66,31 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 3000
-  portName: rbc-auth
+  portName: rbc-api
   protocol: TCP
 
 # OR define an optional ports array
 # TODO - utilise in ingress and testconnection
 # ports: [] # Use this if you want to remove this array
 ports:
-  - name: rbc-auth
+  - name: rbc-api
     port: 3000
     targetPort: 3000
     protocol: TCP
 
-livenessProbe:
-  httpGet:
-    path: /api/auth/hello
-    port: rbc-auth
-  failureThreshold: 1
-  periodSeconds: 10
+# livenessProbe:
+#   httpGet:
+#     path: /api/ping
+#     port: rbc-auth
+#   failureThreshold: 1
+#   periodSeconds: 10
 
-startupProbe:
-  httpGet:
-    path: /api/auth/hello
-    port: rbc-auth
-  failureThreshold: 30
-  periodSeconds: 10
+# startupProbe:
+#   httpGet:
+#     path: /api/ping
+#     port: rbc-auth
+#   failureThreshold: 30
+#   periodSeconds: 10
 
 ingress:
   enabled: true
@@ -102,7 +102,7 @@ ingress:
   hosts:
     - host: rbc.dev
       paths:
-        - path: /api/auth/?(.*)
+        - path: /api/?(.*)
           pathType: Prefix
   tls: []
   #  - secretName: chart-example-tls

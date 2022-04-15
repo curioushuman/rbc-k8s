@@ -1,3 +1,0 @@
-{{- include "rbc-lib.service" (list . "rbc-subscriptions.service") -}}
-{{- define "rbc-subscriptions.service" -}}
-{{- end -}}

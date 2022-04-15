@@ -1,5 +1,5 @@
 {{- if and .Values.ingress.enabled (not .Values.global.umbrellaRelease) -}}
-{{- include "rbc-lib.ingress" (list . "rbc-auth.ingress") -}}
+{{- include "rbc-lib.ingress" (list . "rbc-api.ingress") -}}
 {{- end }}
-{{- define "rbc-auth.ingress" -}}
+{{- define "rbc-api.ingress" -}}
 {{- end -}}

@@ -1,5 +1,0 @@
-{{- if .Values.autoscaling.enabled }}
-{{- include "rbc-lib.hpa" (list . "rbc-subscriptions.hpa") -}}
-{{- end }}
-{{- define "rbc-subscriptions.hpa" -}}
-{{- end -}}
