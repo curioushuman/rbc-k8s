@@ -1,6 +1,9 @@
 dependencies:
+- name: rbc-lib
+  repository: file://../rbc-lib
+  version: 0.1.10
 - name: rbc-api
   repository: file://../subcharts/rbc-api
-  version: 0.1.1
-digest: sha256:5bf0c9701e00627966f9e55fc3fa4b00ffb97d863f28560dd7dd7e34a4846ea7
-generated: "2022-04-15T11:20:32.774106+10:00"
+  version: 0.1.9
+digest: sha256:50f233876e20d1c5ea90e1a2637e5cf65f4d3f799cac8bad257abc7731cf3309
+generated: "2022-04-16T15:19:56.46819+10:00"

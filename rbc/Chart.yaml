@@ -2,11 +2,17 @@ apiVersion: v2
 name: rbc
 description: An umbrella chart for the RbC ecosystem.
 type: application
-version: 0.3.1
+version: 0.3.3
 dependencies:
+  - name: rbc-lib
+    repository: "file://../rbc-lib"
+    version: ~0.1.10
+    tags:
+      - library
+      - shared
   - name: rbc-api
     repository: "file://../subcharts/rbc-api"
-    version: ~0.1.1
+    version: ~0.1.9
     tags:
       - identity
       - access

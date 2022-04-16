@@ -1,6 +1,6 @@
 {{- define "rbc-lib.ingress.tpl" -}}
 {{- $fullName := include "rbc-lib.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
+{{- $svcPort := include "rbc-lib.servicePort" . -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
@@ -49,12 +49,12 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: {{ ternary .backend.serviceName $fullName (not (empty .backend)) }}
                 port:
-                  number: {{ $svcPort }}
+                  number: {{ ternary .backend.servicePort $svcPort (not (empty .backend)) }}
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: {{ ternary .backend.serviceName $fullName (not (empty .backend)) }}
+              servicePort: {{ ternary .backend.servicePort $svcPort (not (empty .backend)) }}
               {{- end }}
           {{- end }}
     {{- end }}

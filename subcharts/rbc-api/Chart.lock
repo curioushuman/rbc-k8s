@@ -1,6 +1,6 @@
 dependencies:
 - name: rbc-lib
   repository: file://../../rbc-lib
-  version: 0.1.2
-digest: sha256:c4fd89f02d44cfb4eb7d2884ab9903033db12792a21b955446bceec3b82e971c
-generated: "2022-04-15T11:20:25.283805+10:00"
+  version: 0.1.10
+digest: sha256:bf7a1535cfd083532a8f0ebc6b34f2e7ca77c3a42ca8b6f71fa183b1ba67bd1e
+generated: "2022-04-16T15:16:27.490347+10:00"

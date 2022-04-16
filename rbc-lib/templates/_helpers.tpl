@@ -60,3 +60,14 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Defined port, or default to 3000
+*/}}
+{{- define "rbc-lib.servicePort" -}}
+{{- if .Values.service }}
+{{- default 3000 .Values.service.port }}
+{{- else }}
+{{- 3000 }}
+{{- end }}
+{{- end }}

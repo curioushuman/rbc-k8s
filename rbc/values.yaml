@@ -49,10 +49,8 @@ ingress:
         - path: /api/?(.*)
           pathType: Prefix
           backend:
-              service:
-                name: rbc-api
-                port:
-                  number: 3000
+            serviceName: rbc-api
+            servicePort: 3000
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
