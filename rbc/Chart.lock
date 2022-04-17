@@ -4,6 +4,6 @@ dependencies:
   version: 0.1.10
 - name: rbc-api
   repository: file://../subcharts/rbc-api
-  version: 0.1.9
-digest: sha256:50f233876e20d1c5ea90e1a2637e5cf65f4d3f799cac8bad257abc7731cf3309
-generated: "2022-04-16T15:19:56.46819+10:00"
+  version: 0.1.10
+digest: sha256:6295f930c6c3f17084a7c711a19402eb8c82728c87e4adb2b21e0665f0bae647
+generated: "2022-04-17T09:27:04.201005+10:00"

@@ -2,7 +2,7 @@ apiVersion: v2
 name: rbc-api
 description: A Helm chart for the RbC api
 type: application
-version: 0.1.9
+version: 0.1.10
 appVersion: "0.1.1"
 dependencies:
   - name: rbc-lib
@@ -11,11 +11,9 @@ dependencies:
     tags:
       - library
       - shared
-  # - name: mongodb
-  #   repository: https://charts.bitnami.com/bitnami
-  #   version: ~11.1.1
-  #   tags:
-  #     - database
-  #     - mongodb
-  #     - auth
-  #     - members
+  - name: mongodb
+    repository: https://charts.bitnami.com/bitnami
+    version: ~11.1.5
+    tags:
+      - database
+      - mongodb

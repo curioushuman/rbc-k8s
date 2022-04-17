@@ -12,7 +12,7 @@ dependencies:
       - shared
   - name: rbc-api
     repository: "file://../subcharts/rbc-api"
-    version: ~0.1.9
+    version: ~0.1.10
     tags:
       - identity
       - access

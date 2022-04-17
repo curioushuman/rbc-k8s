@@ -12,21 +12,21 @@ replicaCount: 1
 
 # DB config for app
 # If no DB please replace with empty object {}
-database: {}
-  # type: "mongodb"
-  # port: "27017"
-  # name: "rbc-auth"
+database:
+  type: "mongodb"
+  port: "27017"
+  name: "rbc-api"
 
 # Overriding DB values for mongodb
 # TODO - pull sc-db dynamically from umbrella
 # * NOTE: storageClass must be set to "" to use default
-# mongodb:
-#   global:
-#     storageClass: ""
-#   auth:
-#     enabled: false
-  # service:
-  #   port: 27017
+mongodb:
+  global:
+    storageClass: ""
+  auth:
+    enabled: false
+  service:
+    port: 27017
 
 
 image:
