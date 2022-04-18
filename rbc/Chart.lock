@@ -1,9 +1,12 @@
 dependencies:
+- name: sealed-secrets
+  repository: https://bitnami-labs.github.io/sealed-secrets
+  version: 2.1.5
 - name: rbc-lib
   repository: file://../rbc-lib
-  version: 0.1.10
+  version: 0.1.12
 - name: rbc-api
   repository: file://../subcharts/rbc-api
-  version: 0.1.10
-digest: sha256:6295f930c6c3f17084a7c711a19402eb8c82728c87e4adb2b21e0665f0bae647
-generated: "2022-04-17T09:27:04.201005+10:00"
+  version: 0.1.12
+digest: sha256:e5fbf021a7ba23c11b315a17cb12e90b4a6a4e0ca20db75642688409f7bc5984
+generated: "2022-04-18T17:57:02.609976+10:00"

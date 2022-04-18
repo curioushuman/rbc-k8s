@@ -2,17 +2,24 @@ apiVersion: v2
 name: rbc
 description: An umbrella chart for the RbC ecosystem.
 type: application
-version: 0.3.3
+version: 0.3.4
 dependencies:
+  - name: sealed-secrets
+    repository: https://bitnami-labs.github.io/sealed-secrets
+    version: ~2.1.5
+    tags:
+      - secret
+      - infrastructure
+      - detail
   - name: rbc-lib
     repository: "file://../rbc-lib"
-    version: ~0.1.10
+    version: ~0.1.12
     tags:
       - library
       - shared
   - name: rbc-api
     repository: "file://../subcharts/rbc-api"
-    version: ~0.1.10
+    version: ~0.1.12
     tags:
       - identity
       - access

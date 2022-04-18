@@ -14,13 +14,24 @@ Env vars consistent across containers
 - name: RBC_UMBRELLA_RELEASE_NAME
   value: "{{ .Values.global.umbrellaRelease }}"
 {{- end }}
-{{- if .Values.database.name }}
-- name: RBC_DATABASE_NAME
-  value: "{{ .Values.database.name }}"
-{{- end }}
-{{- if .Values.database.port }}
-- name: RBC_DATABASE_PORT
-  value: "{{ .Values.database.port }}"
+{{- if .Values.mongodb }}
+{{- if .Values.mongodb.service }}
+- name: RBC_MONGODB_PORT
+  value: "{{ .Values.mongodb.service.port }}"
+{{- end -}}
+{{- if .Values.mongodb.auth }}
+- name: RBC_MONGODB_DATABASE
+  value: "{{ first .Values.mongodb.auth.databases }}"
+{{- if .Values.mongodb.auth.enabled }}
+- name: RBC_MONGODB_USERNAME
+  value: "{{ first .Values.mongodb.auth.usernames }}"
+- name: RBC_MONGODB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: {{ .Values.mongodb.auth.existingSecret }}
+      key: mongodb-passwords
+{{- end -}}
+{{- end -}}
 {{- end }}
 {{- if or .Values.global.debug .Values.local.debug }}
 - name: RBC_DEBUG
