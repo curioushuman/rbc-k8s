@@ -47,14 +47,14 @@ spec:
             pathType: {{ .pathType }}
             {{- end }}
             backend:
+              {{- $svcBackend := (dict "serviceName" $fullName "servicePort" $svcPort) -}}
+              {{- if .backend -}}
+                {{- $svcBackend = .backend -}}
+              {{- end -}}
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              service:
-                name: {{ ternary .backend.serviceName $fullName (not (empty .backend)) }}
-                port:
-                  number: {{ ternary .backend.servicePort $svcPort (not (empty .backend)) }}
+              {{- include "rbc-lib.ingressBackEnd" $svcBackend | nindent 14 }}
               {{- else }}
-              serviceName: {{ ternary .backend.serviceName $fullName (not (empty .backend)) }}
-              servicePort: {{ ternary .backend.servicePort $svcPort (not (empty .backend)) }}
+              {{- include "rbc-lib.ingressBackEndLegacy" $svcBackend | nindent 14 }}
               {{- end }}
           {{- end }}
     {{- end }}

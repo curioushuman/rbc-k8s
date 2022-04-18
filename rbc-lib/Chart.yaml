@@ -2,4 +2,4 @@ apiVersion: v2
 name: rbc-lib
 description: Library for RbC ecosystem
 type: library
-version: 0.1.10
+version: 0.1.12
