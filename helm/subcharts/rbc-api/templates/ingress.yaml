@@ -1,4 +1,4 @@
-{{- if and .Values.ingress.enabled (not .Values.global.umbrellaRelease) -}}
+{{- if .Values.ingress.enabled -}}
 {{- include "rbc-lib.ingress" (list . "rbc-api.ingress") -}}
 {{- end }}
 {{- define "rbc-api.ingress" -}}

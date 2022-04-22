@@ -22,42 +22,41 @@ metadata:
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- include "rbc-lib.namespace" . | nindent 2 }}
 spec:
-  {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
+  {{- include "rbc-lib.ingressClassName" . | nindent 2 }}
   {{- if .Values.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
+  {{- range .Values.ingress.tls }}
+  - hosts:
+      {{- range .hosts }}
+      - {{ . | quote }}
+      {{- end }}
+    secretName: {{ .secretName }}
   {{- end }}
-  rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-          {{- range .paths }}
-          - path: {{ .path }}
-            {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
-            pathType: {{ .pathType }}
-            {{- end }}
-            backend:
-              {{- $svcBackend := (dict "serviceName" $fullName "servicePort" $svcPort) -}}
-              {{- if .backend -}}
-                {{- $svcBackend = .backend -}}
-              {{- end -}}
-              {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
-              {{- include "rbc-lib.ingressBackEnd" $svcBackend | nindent 14 }}
-              {{- else }}
-              {{- include "rbc-lib.ingressBackEndLegacy" $svcBackend | nindent 14 }}
-              {{- end }}
+  {{- end }}
+  rules: {{- range .Values.ingress.hosts }}
+  - host: {{ .host | quote }}
+    http:
+      paths:
+        {{- range .paths }}
+        - pathType: {{ .pathType }}
+          path: {{ .path }}
+          {{- if and .pathType (semverCompare ">=1.18-0" $.Capabilities.KubeVersion.GitVersion) }}
+
           {{- end }}
-    {{- end }}
+          backend:
+            {{- $svcBackend := (dict "serviceName" $fullName "servicePort" $svcPort) }}
+            {{- if .backend }}
+            {{- $svcBackend = .backend }}
+            {{- end }}
+            {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
+            {{- include "rbc-lib.ingressBackEnd" $svcBackend | nindent 14 }}
+            {{- else }}
+            {{- include "rbc-lib.ingressBackEndLegacy" $svcBackend | indent 14 }}
+            {{- end }}
+        {{- end }}
+  {{- end }}
 {{- end -}}
 {{- define "rbc-lib.ingress" -}}
 {{- include "rbc-lib.util.merge" (append . "rbc-lib.ingress.tpl") -}}

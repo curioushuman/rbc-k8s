@@ -2,12 +2,68 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# * NOTE: namespace also included below in dependency configuration
+
 global:
-  umbrellaRelease: "rbc"
+  umbrellaRelease: rbc
+  namespaceOverride: rbc-ecosystem
+  ingressClassName: nginx
   debug: true
 
 tags:
   rbc: true
+
+replicaCount: 1
+
+# Configuration for sealed secrets
+sealed-secrets:
+  namespace: kube-system
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+ingress:
+  enabled: false
+  className: ""
+  # annotations:
+  #   nginx.ingress.kubernetes.io/use-regex: "true"
+  # hosts:
+  #   - host: rbc.dev
+  #     paths:
+  #       - path: /api/?(.*)
+  #         pathType: Prefix
+  #         backend:
+  #           serviceName: rbc-api
+  #           servicePort: 3000
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+# Configuration for ingress-nginx
+# RE admissionWebhooks:
+# https://stackoverflow.com/questions/61616203/nginx-ingress-controller-failed-calling-webhook
+# Disabling it is not the best solution, at some point later review some of the other options
+ingress-nginx:
+  controller:
+    ingressClassResource:
+      default: "true"
+    admissionWebhooks:
+      enabled: false
+# For later
+# Source: https://github.com/weaveworks/profiles-catalog/blob/357f93352e45918724322654c17c2e9bca8f7fb5/charts/ingress-nginx/values.yaml
+#     service:
+#       annotations:
+#         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+#         networking.gke.io/load-balancer-type: "Internal"
+#         service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+#         service.beta.kubernetes.io/oci-load-balancer-internal: "true"
 
 # TODO - get this working using a relevant provisioner
 storageClass:
@@ -23,35 +79,7 @@ storageClass:
   # reclaimPolicy: "Retain"
   # parameters: {}
 
-replicaCount: 1
+# Unused values
 
 nameOverride: ""
 fullnameOverride: ""
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: false
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-ingress:
-  enabled: true
-  className: ""
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/use-regex: "true"
-  hosts:
-    - host: rbc.dev
-      paths:
-        - path: /api/?(.*)
-          pathType: Prefix
-          backend:
-            serviceName: rbc-api
-            servicePort: 3000
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local

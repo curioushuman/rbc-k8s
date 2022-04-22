@@ -5,19 +5,20 @@ metadata:
   name: {{ include "rbc-lib.fullname" . }}
   labels:
     {{- include "rbc-lib.labels" . | nindent 4 }}
+  {{- include "rbc-lib.namespace" . | nindent 2 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
   {{- if .Values.ports }}
     {{- range .Values.ports }}
     - port: {{ .port }}
-      targetPort: {{ .name }}
+      targetPort: {{ .targetPort }}
       protocol: {{ .protocol }}
       name: {{ .name }}
     {{- end }}
   {{- else }}
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.portName }}
+      targetPort: {{ .Values.service.targetPort }}
       protocol: {{ .Values.service.protocol }}
       name: {{ .Values.service.portName }}
   {{- end }}
