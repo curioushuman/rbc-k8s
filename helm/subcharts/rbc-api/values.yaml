@@ -50,19 +50,19 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-# livenessProbe:
-#   httpGet:
-#     path: /api/ping
-#     port: rbc-auth
-#   failureThreshold: 1
-#   periodSeconds: 10
+livenessProbe:
+  httpGet:
+    path: /api/ping
+    port: rbc-api
+  failureThreshold: 1
+  periodSeconds: 10
 
-# startupProbe:
-#   httpGet:
-#     path: /api/ping
-#     port: rbc-auth
-#   failureThreshold: 30
-#   periodSeconds: 10
+startupProbe:
+  httpGet:
+    path: /api/ping
+    port: rbc-api
+  failureThreshold: 30
+  periodSeconds: 10
 
 # Overriding DB values for mongodb
 # TODO - pull sc-db dynamically from umbrella
