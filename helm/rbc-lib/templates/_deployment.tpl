@@ -5,6 +5,7 @@ metadata:
   name: {{ include "rbc-lib.fullname" . }}
   labels:
     {{- include "rbc-lib.labels" . | nindent 4 }}
+  {{- include "rbc-lib.namespace" . | nindent 2 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

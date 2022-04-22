@@ -71,3 +71,13 @@ Defined port, or default to 3000
 {{- 3000 }}
 {{- end }}
 {{- end }}
+
+{{/*
+Namespace
+TODO: deal with an empty value from global
+*/}}
+{{- define "rbc-lib.namespace" -}}
+{{- if .Values.global.namespaceOverride }}
+namespace: {{ .Values.global.namespaceOverride }}
+{{- end }}
+{{- end }}

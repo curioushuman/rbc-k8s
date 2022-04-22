@@ -12,6 +12,7 @@ metadata:
 {{- if .Values.storageClass.defaultClass }}
     storageclass.kubernetes.io/is-default-class: "true"
 {{- end }}
+  {{- include "rbc-lib.namespace" . | nindent 2 }}
 provisioner: {{ template "rbc-lib.storageClassProvisioner" . }}
 allowVolumeExpansion: {{ template "rbc-lib.storageClassVolumeExpansion" . }}
 volumeBindingMode: {{ template "rbc-lib.storageClassVolumeBinding" . }}
