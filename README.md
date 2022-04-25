@@ -13,10 +13,10 @@ This is for a personal project, so the README is largely geared towards myself (
 $ brew install doctl
 ```
 
-## argo cli
+## argocd cli
 
 ```bash
-$ brew install argo
+$ brew install argocd
 ```
 
 ## kubeseal cli
@@ -76,13 +76,20 @@ $ kubectl config use-context docker-desktop
 
 ## Manually install (some) applications
 
-We use ArgoCD to manage all of our applications in the cloud, but to get things to work locally (using Skaffold) we need to install some manually:
+We use ArgoCD to deploy all of our applications to the cloud via GitOps, so there is no need for manual installation in the long term. To get yourself set up though, we need to take a few manual steps.
+
+Some apps you'll need to install locally, I haven't bothered with ArgoCD for local K8s management as it seemed like overkill. You'll need to install the following locally:
+
+- Ingress
+- Sealed secrets
+
+If you're using this as the basis for your own project, before anything will work in the cloud you'll need to install the following manually in your cloud cluster:
 
 - Ingress
 - Cert. manager
-- Sealed secrets
+- ArgoCD
 
-**Note:** we use custom wrapper charts around all of our third party apps to bundle `values.yaml` and any required custom templates.
+**Note:** we use custom wrapper charts around all of our third party apps to bundle `values.yaml` and any required custom templates. All of the installation instructions below use these wrapper charts rather than straight from the repository.
 
 ### Ingress
 
@@ -109,28 +116,6 @@ $ kubectl get all -n ingress-nginx
 $ helm ls -n ingress-nginx
 ```
 
-### Cert manager
-
-This should not be required locally...
-
-Installed in the cloud following DO instructions:
-
-- [#step-5---configuring-production-ready-tls-certificates-for-nginx](https://github.com/digitalocean/Kubernetes-Starter-Kit-Developers/blob/main/03-setup-ingress-controller/nginx.md#step-5---configuring-production-ready-tls-certificates-for-nginx)
-
-```bash
-# Make sure you're in the correct context
-$ kubectl config use-context <cloud_context_name>
-# Update dependencies
-$ helm dep update infra/cert-manager
-# Install ingress via our custom wrapper chart using recommended local settings
-$ helm upgrade --install cert-manager infra/cert-manager  \
-  --namespace cert-manager \
-  --create-namespace \
-# Check install was successful
-$ kubectl get all -n cert-manager
-$ helm ls -n cert-manager
-```
-
 ### Sealed secrets
 
 Installation in cloud will be managed by ArgoCD, but you'll need this locally for the core applications to function. We install in the `argocd` namespace both locally and in the cloud.
@@ -149,9 +134,79 @@ $ helm upgrade --install sealed-secrets infra/sealed-secrets  \
 $ kubectl get all -n argocd
 ```
 
+### Cert manager (Cloud only)
+
+Not currently installed in development, and the `values-local.yaml` support the insecure version of Ingress.
+
+Installed in the cloud by following DO instructions:
+
+- [#step-5---configuring-production-ready-tls-certificates-for-nginx](https://github.com/digitalocean/Kubernetes-Starter-Kit-Developers/blob/main/03-setup-ingress-controller/nginx.md#step-5---configuring-production-ready-tls-certificates-for-nginx)
+
+```bash
+# Make sure you're in the correct context
+$ kubectl config use-context <cloud_context_name>
+# Update dependencies
+$ helm dep update infra/cert-manager
+# Install ingress via our custom wrapper chart using recommended local settings
+$ helm upgrade --install cert-manager infra/cert-manager  \
+  --namespace cert-manager \
+  --create-namespace
+# Check install was successful
+$ kubectl get all -n cert-manager
+$ helm ls -n cert-manager
+```
+
 ### Argo CD (Cloud only)
 
-Not required locally, only in the cloud. Manual install via helm is required before it can manage all of our applications, but this should have already been taken care of.
+This one was tricky, but the result is stored in the values.yaml of our wrapper chart for ArgoCD. Some key points:
+
+- `fullnameOverride` required
+  - By including ArgoCD as dependency broke things like service endpoints
+  - Using fullnameOverride reinstates the name Argo expects
+- TLS/certificates
+  - This was a real struggle
+  - [Official docs for Ingress](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#kubernetesingress-nginx) (@ time of writing) included info that was marked as deprecated by [official TLS docs](https://argo-cd.readthedocs.io/en/stable/operator-manual/tls/)
+  - Resolved via server.certificate.enabled and related parameters in the ArgoCD helm chart
+  - *Note:* ArgoCD creates it's own certificate using this setup
+  - Solution encapsulated within our wrapper chart
+
+Install via:
+
+```bash
+# Make sure you're in the correct context
+$ kubectl config use-context <cloud_context_name>
+# Update dependencies
+$ helm dep update infra/argo-cd
+# Install ingress via our custom wrapper chart using recommended local settings
+$ helm upgrade --install argo-cd infra/argo-cd  \
+  --namespace argocd \
+  --create-namespace
+# Check install was successful
+$ kubectl get all -n argocd
+$ helm ls -n argocd
+```
+
+**Note:** namespace is without dash (`argocd`), while release name is with dash (`argo-cd`).
+
+Configure your account to access ArgoCD:
+
+```bash
+# Get admin password stored in secret
+$ export ARGO_PASS_OLD=$(kubectl -n argocd \
+  get secret argocd-initial-admin-secret \
+  -o jsonpath="{.data.password}" \
+  | base64 -d)
+# Login to ArgoCD CLI
+$ argocd login \
+  --username admin \
+  --password $ARGO_PASS_OLD \
+  --grpc-web \
+  argocd.curiouscommunities.net
+# Update the password to something different to the original
+$ argocd account update-password \
+  --current-password $ARGO_PASS_OLD \
+  --new-password 'somethingSecure'
+```
 
 # Setup - other
 
@@ -208,6 +263,16 @@ $ kubectl get all -n rbc-ecosystem
 # Check on a specific thing
 # kubectl describe <resource_name> <specific_resource_name> -n rbc-ecosystem
 $ kubectl describe pod rbc-api-55c76f6f7b-f769l -n rbc-ecosystem
+```
+
+### Ingress issues
+
+**Error obtaining Endpoints for Service**
+
+Discovered by looking at ingress logs (see above). Then reviewing endpoints:
+
+```bash
+$ kubectl get endpoints -n <namespace>
 ```
 
 ### Annoying situations to be aware of
