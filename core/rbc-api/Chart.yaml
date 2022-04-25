@@ -1,12 +1,12 @@
 apiVersion: v2
 name: rbc-api
-description: A Helm chart for the RbC api
+description: A Helm chart for the RbC API
 type: application
-version: 0.1.15
+version: 1.0.0
 appVersion: "0.1.1"
 dependencies:
   - name: rbc-lib
-    repository: "file://../../rbc-lib"
+    repository: "file://../rbc-lib"
     version: ~0.1.15
     tags:
       - library

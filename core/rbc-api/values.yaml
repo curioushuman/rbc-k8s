@@ -4,6 +4,8 @@
 
 global:
   umbrellaRelease: ""
+  namespaceOverride: rbc-ecosystem
+  ingressClassName: nginx
 
 local:
   debug: true
@@ -35,9 +37,7 @@ ports:
 
 ingress:
   enabled: true
-  # className inherited from global
-  # you can override it here if you need to
-  # className: nginx
+  className: nginx
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
@@ -50,7 +50,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-# ! Unfortunately don't work when tests are failing
+# ! Unfortunately these don't work when (nest) tests are failing
 # livenessProbe:
 #   httpGet:
 #     path: /api/ping
@@ -82,6 +82,20 @@ mongodb:
     port: 27017
 
 # Unused values
+
+# TODO - get this working using a relevant provisioner
+storageClass:
+  # Specifies whether a storage class should be created
+  create: false
+  # name: "sc-db"
+  # annotations: {}
+  # apiVersion: ""
+  # defaultClass: false
+  # provisioner: ""
+  # allowVolumeExpansion: true
+  # volumeBindingMode: "WaitForFirstConsumer"
+  # reclaimPolicy: "Retain"
+  # parameters: {}
 
 serviceAccount:
   # Specifies whether a service account should be created

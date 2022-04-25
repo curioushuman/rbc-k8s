@@ -211,20 +211,13 @@ Make sure everything works, and then:
 
 # CI/CD
 
-## 1. Helm for YAML production
-
-At the moment the below will output a single file with all chart YAML in it. See appendix for more info.
-
-```bash
-# From root
-$ helm template rbc ./core/helm/rbc --skip-tests > ./core/kustomize/base/rbc.yaml
-```
-
-## 2. Kustomize for customisation and environment management
-
-
+TBC
 
 # Appendix
+
+## Decision: moving away from Umbrella Helm chart
+
+As I moved into using ArgoCD for CI/CD I realised that it would be better for the core project charts to be considered separate entities so ArgoCD could monitor, and update, separately.
 
 ## Why manual steps in k8s setup?
 
@@ -234,7 +227,7 @@ So, we have the following approach for non-core apps:
 
 - Those required in dev and cloud
   - Configuration stored declaratively
-  - Install manually into dev cluster
+  - Install manually into local cluster
     - Supported by instructions in README
   - Update manually where necessary
   - Save updates to declarative configuration
@@ -246,18 +239,13 @@ So, we have the following approach for non-core apps:
 
 ### core
 
-**TODO:** update this based on the outcome of your thinking RE helm being monorepo, and kustomize dealing with separate repos.
-
-i.e. what we're here to work on, the project itself AND anything that is required *for the functioning* of the cluster **BOTH** in development and production. Both custom and required third party apps are contained, and configured, as **Helm** charts within the umbrella chart `rbc`. Examples include:
-
-- All custom apps e.g. `rbc-api`, `rbc-app`
-- Sealed secrets
+i.e. what we're here to work on, the project itself.
 
 ### git-ops
 
 This is where we keep our Argo configuration i.e. projects, apps, etc.
 
-### support
+### infra
 
 Everything else that is required:
 
@@ -275,6 +263,10 @@ Examples include:
 After much research (I wish I'd saved some bookmarks), I've found (as usual) there are many strong opinions touting one over the other, but als more than a few promoting the value of using both. They are both wonderful tools that have a place; sometimes one outdoes the other for particular scenarios so why not employ them for that purpose.
 
 The over-arching goal is to keep complexity down, so I hope I have managed that (guided by other people's experiences).
+
+### Update: 2022-04-25
+
+In the end I've gone with Helm more broadly, and I may come back to adding Kustomize in as and when it is required.
 
 ## Creating new secrets with Kubeseal
 
@@ -324,6 +316,10 @@ $ helm template rbc ./core/helm/rbc --skip-tests --output-dir ./base
 It would be nicer if things were in separate files, but Helm doesn't offer anything in core or plugins (apart from the above). The following includes a bash file example, but the comments RE risk of file overwrite are 100% correct. Will look at this another day:
 
 * https://github.com/helm/helm/issues/4680
+
+### Update: 2022-04-25
+
+This is vastly improved now I've moved everything out of the Hlm umbrella chart. However, there is still the risk of file overwriting where any dependency is included so do be careful.
 
 ## Inspiration
 
