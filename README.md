@@ -45,6 +45,9 @@ $ helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 * Bitnami
   * bitnami
   * https://charts.bitnami.com/bitnami
+* Jetstack
+  * jetstack
+  * https://charts.jetstack.io
 
 ## Clusters
 
@@ -76,6 +79,7 @@ $ kubectl config use-context docker-desktop
 We use ArgoCD to manage all of our applications in the cloud, but to get things to work locally (using Skaffold) we need to install some manually:
 
 - Ingress
+- Cert. manager
 - Sealed secrets
 
 **Note:** we use custom wrapper charts around all of our third party apps to bundle `values.yaml` and any required custom templates.
@@ -94,7 +98,7 @@ Currently `values.yaml` is based on DO recommendation, `values-local.yaml` is mo
 # Make sure you're in the correct context
 $ kubectl config use-context <dev_context_name>
 # Update dependencies
-$ helm dep update infra/ingress
+$ helm dep update infra/ingress-nginx
 # Install ingress via our custom wrapper chart using recommended local settings
 $ helm upgrade --install ingress-nginx infra/ingress-nginx  \
   --namespace ingress-nginx \
@@ -102,6 +106,29 @@ $ helm upgrade --install ingress-nginx infra/ingress-nginx  \
   -f infra/ingress-nginx/values-local.yaml
 # Check install was successful
 $ kubectl get all -n ingress-nginx
+$ helm ls -n ingress-nginx
+```
+
+### Cert manager
+
+This should not be required locally...
+
+Installed in the cloud following DO instructions:
+
+- [#step-5---configuring-production-ready-tls-certificates-for-nginx](https://github.com/digitalocean/Kubernetes-Starter-Kit-Developers/blob/main/03-setup-ingress-controller/nginx.md#step-5---configuring-production-ready-tls-certificates-for-nginx)
+
+```bash
+# Make sure you're in the correct context
+$ kubectl config use-context <cloud_context_name>
+# Update dependencies
+$ helm dep update infra/cert-manager
+# Install ingress via our custom wrapper chart using recommended local settings
+$ helm upgrade --install cert-manager infra/cert-manager  \
+  --namespace cert-manager \
+  --create-namespace \
+# Check install was successful
+$ kubectl get all -n cert-manager
+$ helm ls -n cert-manager
 ```
 
 ### Sealed secrets

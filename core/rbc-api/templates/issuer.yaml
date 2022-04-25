@@ -1,0 +1,5 @@
+{{- if .Values.issuer.enabled -}}
+{{- include "rbc-lib.issuer" (list . "rbc-api.issuer") -}}
+{{- end }}
+{{- define "rbc-api.issuer" -}}
+{{- end -}}

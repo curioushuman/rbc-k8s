@@ -6,7 +6,7 @@ global:
   namespaceOverride: rbc-ecosystem
 
 local:
-  debug: false
+  debug: true
 
 replicaCount: 1
 
@@ -39,34 +39,19 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
-    - host: api.curiouscommunities.net
+    - host: rbc.dev
       paths:
         - path: /api/?(.*)
           pathType: Prefix
-  tls:
-   - secretName: letsencrypt-rbc-secret
-     hosts:
-       - api.curiouscommunities.net
+  tls: []
+  #  - secretName: letsencrypt-rbc-secret
+  #    hosts:
+  #      - api.curiouscommunities.net
 
 issuer:
-  enabled: true
-  email: "mike@curioushuman.com.au"
+  enabled: false
+  # email: "mike@curioushuman.com.au"
   # server: "https://acme-v02.api.letsencrypt.org/directory"
-
-# ! Unfortunately these don't work when (nest) tests are failing
-# livenessProbe:
-#   httpGet:
-#     path: /api/ping
-#     port: rbc-api
-#   failureThreshold: 1
-#   periodSeconds: 10
-
-# startupProbe:
-#   httpGet:
-#     path: /api/ping
-#     port: rbc-api
-#   failureThreshold: 30
-#   periodSeconds: 10
 
 # Overriding DB values for mongodb
 # TODO - pull sc-db dynamically from umbrella
@@ -83,6 +68,21 @@ mongodb:
     existingSecret: "rbc-api-mongodb"
   service:
     port: 27017
+
+# ! Unfortunately these don't work when (nest) tests are failing
+# livenessProbe:
+#   httpGet:
+#     path: /api/ping
+#     port: rbc-api
+#   failureThreshold: 1
+#   periodSeconds: 10
+
+# startupProbe:
+#   httpGet:
+#     path: /api/ping
+#     port: rbc-api
+#   failureThreshold: 30
+#   periodSeconds: 10
 
 # Unused values
 
