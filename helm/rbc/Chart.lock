@@ -1,15 +1,9 @@
 dependencies:
-- name: ingress-nginx
-  repository: https://kubernetes.github.io/ingress-nginx
-  version: 4.0.19
-- name: sealed-secrets
-  repository: https://bitnami-labs.github.io/sealed-secrets
-  version: 2.1.6
 - name: rbc-lib
   repository: file://../rbc-lib
   version: 0.1.15
 - name: rbc-api
   repository: file://../subcharts/rbc-api
   version: 0.1.15
-digest: sha256:9dbd40dd4a9ef4e89b9e4edec419c5bb5e7816f84b940034478460f74c067273
-generated: "2022-04-22T09:56:50.064656+10:00"
+digest: sha256:8edb964b4caf6727c59c46a603ff4151f6027c63b9b11d0644474ea33c0d05d3
+generated: "2022-04-25T10:24:13.636067+10:00"

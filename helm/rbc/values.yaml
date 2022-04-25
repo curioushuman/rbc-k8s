@@ -15,10 +15,6 @@ tags:
 
 replicaCount: 1
 
-# Configuration for sealed secrets
-sealed-secrets:
-  namespace: kube-system
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -45,25 +41,6 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-# Configuration for ingress-nginx
-# RE admissionWebhooks:
-# https://stackoverflow.com/questions/61616203/nginx-ingress-controller-failed-calling-webhook
-# Disabling it is not the best solution, at some point later review some of the other options
-ingress-nginx:
-  controller:
-    ingressClassResource:
-      default: "true"
-    admissionWebhooks:
-      enabled: false
-# For later
-# Source: https://github.com/weaveworks/profiles-catalog/blob/357f93352e45918724322654c17c2e9bca8f7fb5/charts/ingress-nginx/values.yaml
-#     service:
-#       annotations:
-#         service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-#         networking.gke.io/load-balancer-type: "Internal"
-#         service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-#         service.beta.kubernetes.io/oci-load-balancer-internal: "true"
 
 # TODO - get this working using a relevant provisioner
 storageClass:

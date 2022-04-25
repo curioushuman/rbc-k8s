@@ -2,25 +2,8 @@ apiVersion: v2
 name: rbc
 description: An umbrella chart for the RbC ecosystem.
 type: application
-version: 0.3.9
+version: 0.4.0
 dependencies:
-  # https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx
-  - name: ingress-nginx
-    repository: https://kubernetes.github.io/ingress-nginx
-    version: ~4.0.19
-    tags:
-      - infrastructure
-      - detail
-      - ingress
-      - nginx
-  # https://artifacthub.io/packages/helm/bitnami-labs/sealed-secrets
-  - name: sealed-secrets
-    repository: https://bitnami-labs.github.io/sealed-secrets
-    version: ~2.1.5
-    tags:
-      - infrastructure
-      - detail
-      - secret
   - name: rbc-lib
     repository: "file://../rbc-lib"
     version: ~0.1.15
