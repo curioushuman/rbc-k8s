@@ -141,7 +141,7 @@ $ kubectl get all -n argocd
 
 ### Cert manager (Cloud only)
 
-Not currently installed in development, and the `values-local.yaml` support the insecure version of Ingress.
+Not currently installed in development. All core helm charts ignore TLS, it is added during CI/CD via Kustomize.
 
 Installed in the cloud by following DO instructions:
 
@@ -340,6 +340,8 @@ $ kustomize build core/rbc-api/overlays/production \
 ## Commit and push
 
 When you're happy, push to the main repo... TBC
+
+TODO: mention in here that we build in the k8s cluster so that the container matches the k8s cluster architecture i.e. amd64 vs arm64.
 
 # Appendix
 
