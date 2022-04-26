@@ -398,6 +398,8 @@ In the end I've gone with Helm more broadly, and I may come back to adding Kusto
 
 ## Creating new secrets with Kubeseal
 
+**Important note:** you need to create the sealed secret using the sealed secret controller that is going to unseal it. SO for sealed secrets that will be unsealed in the cloud, you need to use the cloud cluster context to run kubeseal (so it uses the cloud based ss-controller).
+
 ```bash
 # 1. Deploy sealed secrets (SS) controller to k8s
 # Note: most of the deploy will fail, but SS-c will work
