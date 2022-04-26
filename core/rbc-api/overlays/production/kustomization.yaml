@@ -10,6 +10,7 @@ resources:
 patchesStrategicMerge:
 - patches/deployment.rmv-debug.patch.yaml
 - patches/ingress.add-tls.patch.yaml
+- patches/rbc-api.mongodb.delete.yaml
 
 replacements:
 - path: patches/rbc-api-mongodb.replacement.yaml
