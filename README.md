@@ -8,20 +8,25 @@ This is for a personal project, so the README is largely geared towards myself (
 
 *Apologies:* this is directed towards those on MacOS.
 
-## Digital Ocean k8s cli
-```bash
-$ brew install doctl
-```
-
 ## argocd cli
 
 ```bash
 $ brew install argocd
 ```
 
+## Digital Ocean k8s cli
+```bash
+$ brew install doctl
+```
+
 ## kubeseal cli
 ```bash
 $ brew install kubeseal
+```
+
+## kustomize cli
+```bash
+$ brew install kustomize
 ```
 
 # Setup K8s
@@ -208,6 +213,15 @@ $ argocd account update-password \
   --new-password 'somethingSecure'
 ```
 
+Add your projects and applications:
+
+```bash
+# Add projects for ArgoCD to track
+$ kubectl apply -f git-ops/projects.yaml
+# Add applications for ArgoCD to track
+$ kubectl apply -f git-ops/apps.yaml
+```
+
 # Setup - other
 
 ## Configure local domain
@@ -223,19 +237,25 @@ $ sudo vim /etc/hosts
 
 # Development
 
+*Note:* where I have used `-n rbc-dev`, use the relevant namespace for the cluster you're working in e.g. `staging`, `production`, `your-namespace`
+
+## Skaffold & Helm
+
+For local development we use Skaffold, in related app repo, and the Helm version of our K8s configuration.
+
 ## Logging K8s
 
 Use the following to review logs for your deployed pods:
 
 ```bash
 # Review logs for your pods
-$ kubectl logs deployment/rbc-api -n rbc-ecosystem
+$ kubectl logs deployment/rbc-api -n rbc-dev
 
 # Review logs for sealed secrets
 # first get the generated pod name for sealed secrets controller
-$ kubectl get pods -n rbc-ecosystem
+$ kubectl get pods -n rbc-dev
 # Then run logs
-$ kubectl logs -f rbc-sealed-secrets-<generated_name> -n rbc-ecosystem
+$ kubectl logs -f rbc-sealed-secrets-<generated_name> -n rbc-dev
 
 # Review logs for ingress
 # first get the generated pod name for ingress controller
@@ -258,11 +278,11 @@ The following commands can be quite useful to troubleshoot:
 
 ```bash
 # Check on all the things
-$ kubectl get all -n rbc-ecosystem
+$ kubectl get all -n rbc-dev
 
 # Check on a specific thing
-# kubectl describe <resource_name> <specific_resource_name> -n rbc-ecosystem
-$ kubectl describe pod rbc-api-55c76f6f7b-f769l -n rbc-ecosystem
+# kubectl describe <resource_name> <specific_resource_name> -n rbc-dev
+$ kubectl describe pod rbc-api-55c76f6f7b-f769l -n rbc-dev
 ```
 
 ### Ingress issues
@@ -303,7 +323,23 @@ Make sure everything works, and then:
 
 # CI/CD
 
-TBC
+## From Helm to Kustomize
+
+Kustomize is better for multi-environment management. Our ArgoCD setup monitors the Kustomize directories for changes, not the Helm ones.
+
+```bash
+# Output helm charts as YAML
+$ helm template rbc ./core/helm/rbc-api --skip-tests -n production > ./core/rbc-api/base/all.yaml
+# Make any changes via Kustomize that you need to
+# Test the kustomize output (even if you don't change Kustomize config)
+# -o outputs to file
+$ kustomize build core/rbc-api/overlays/production \
+  -o k-test.yaml
+```
+
+## Commit and push
+
+When you're happy, push to the main repo... TBC
 
 # Appendix
 
@@ -369,7 +405,7 @@ $ skaffold dev
 # 2. Create a new SS using kubeseal
 # Note: to save a whole lot of hassle, we've set scope to be cluster-wide
 $ kubectl \
-  --namespace rbc-ecosystem \
+  --namespace rbc-dev \
   create secret generic rbc-api-super-secret \
   --dry-run=client \
   --from-literal username='jake_blues' \
@@ -382,7 +418,7 @@ $ kubectl \
 
 # MongoDb specific secret requirements
 $ kubectl \
-  --namespace rbc-ecosystem \
+  --namespace rbc-dev \
   create secret generic rbc-api-mongodb \
   --dry-run=client \
   --from-literal mongodb-passwords='pa$$word' \
@@ -402,7 +438,7 @@ Yes, but no. The following outputs to multiple files, but it places them in a di
 
 ```bash
 # From root
-$ helm template rbc ./core/helm/rbc --skip-tests --output-dir ./base
+$ helm template rbc ./core/helm/rbc --skip-tests  -n production --output-dir ./base
 ```
 
 It would be nicer if things were in separate files, but Helm doesn't offer anything in core or plugins (apart from the above). The following includes a bash file example, but the comments RE risk of file overwrite are 100% correct. Will look at this another day:
