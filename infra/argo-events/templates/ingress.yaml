@@ -19,7 +19,7 @@
 #         pathType: Prefix
 #         backend:
 #           service:
-#             name: github-eventsource-svc
+#             name: github-rbc-eventsource-svc
 #             port:
 #               number: 12000
 #   tls:
@@ -49,6 +49,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: github-eventsource-svc
+            name: github-rbc-eventsource-svc
             port:
               number: 12000

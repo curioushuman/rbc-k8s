@@ -1,16 +1,14 @@
----
-
 apiVersion: argoproj.io/v1alpha1
 kind: Sensor
 metadata:
-  name: github-rbc-sensor
+  name: github-rbc
 spec:
   template:
     serviceAccountName: argo-events-sa
   dependencies:
-  - name: github-rbc-source
-    eventSourceName: github-rbc-source
-    eventName: rbc
+    - name: github-rbc-eventsource
+      eventSourceName: github-rbc
+      eventName: rbc-event
   triggers:
   - template:
       name: github-rbc-trigger
