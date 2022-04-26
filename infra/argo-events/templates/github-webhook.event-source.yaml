@@ -15,7 +15,7 @@ spec:
         endpoint: /github-rbc
         port: "12000"
         method: POST
-        url: http://argo-events.curiouscommunities.net
+        url: https://argo-events.curiouscommunities.net
       events:
         - "*"
       apiToken:
