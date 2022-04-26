@@ -89,6 +89,8 @@ mongodb:
     existingSecret: "rbc-api-mongodb"
   service:
     port: 27017
+  # Required to remove problematic affinity settings
+  podAntiAffinityPreset: ""
 
 # Unused values
 

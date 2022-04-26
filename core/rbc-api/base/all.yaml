@@ -126,17 +126,7 @@ spec:
         podAffinity:
           
         podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: mongodb
-                    app.kubernetes.io/instance: rbc
-                    app.kubernetes.io/component: mongodb
-                namespaces:
-                  - "production"
-                topologyKey: kubernetes.io/hostname
-              weight: 1
+          
         nodeAffinity:
           
       securityContext:

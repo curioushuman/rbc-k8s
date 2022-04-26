@@ -6,8 +6,11 @@ resources:
 - rbc-api-mongodb.staging.yaml
 
 patchesStrategicMerge:
+- patches/deployment.namespace.patch.yaml
 - patches/ingress.staging.patch.yaml
 - patches/rbc-api.mongodb.delete.yaml
 
 replacements:
 - path: patches/rbc-api-mongodb.replacement.yaml
+
+namespace: staging

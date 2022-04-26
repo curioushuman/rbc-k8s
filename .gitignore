@@ -33,3 +33,6 @@ Thumbs.db
 # Helm charts
 /core/**/charts/
 /infra/**/charts/
+
+# Test files
+k-test.yaml
