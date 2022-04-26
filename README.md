@@ -41,6 +41,9 @@ To install each repo, run the following commands:
 $ helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 ```
 
+* Argo
+  * argo
+  * https://argoproj.github.io/argo-helm
 * (Bitnami) Sealed Secrets
   * sealed-secrets
   * https://bitnami-labs.github.io/sealed-secrets
@@ -345,6 +348,20 @@ TODO: mention in here that we build in the k8s cluster so that the container mat
 
 # Appendix
 
+## Notes on other supporting applications
+
+### Argo Events
+
+**The Helm chart [doesn't include the actual event bus](https://github.com/argoproj/argo-helm/issues/840)**
+
+It may or may not in the future, we'll need to keep an eye on it. Until then, I've grabbed the default manifest from [Argo Events installation](https://argoproj.github.io/argo-events/installation/#using-helm-chart) guide and added it as a template.
+
+**Setup steps for GitHub event source**
+
+- https://argoproj.github.io/argo-events/eventsources/setup/github/
+
+Most importantly create your own [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for GitHub. Give it all the permissions under the repo section.
+
 ## Decision: moving away from Umbrella Helm chart
 
 As I moved into using ArgoCD for CI/CD I realised that it would be better for the core project charts to be considered separate entities so ArgoCD could monitor, and update, separately.
@@ -390,13 +407,13 @@ Examples include:
 
 ## Why Helm AND Kustomize?
 
-After much research (I wish I'd saved some bookmarks), I've found (as usual) there are many strong opinions touting one over the other, but als more than a few promoting the value of using both. They are both wonderful tools that have a place; sometimes one outdoes the other for particular scenarios so why not employ them for that purpose.
+After much research (I wish I'd saved some bookmarks), I've found (as usual) there are many strong opinions touting one over the other, but also more than a few promoting the value of using both. They are both wonderful tools that have a place; sometimes one outdoes the other for particular scenarios so why not employ them for that purpose.
 
 The over-arching goal is to keep complexity down, so I hope I have managed that (guided by other people's experiences).
 
 ### Update: 2022-04-25
 
-In the end I've gone with Helm more broadly, and I may come back to adding Kustomize in as and when it is required.
+In the end I've gone with Helm more broadly, with Kustomize for environment management mostly.
 
 ## Creating new secrets with Kubeseal
 
@@ -468,3 +485,20 @@ Amazing set of videos. The link above is to the combined one, but it includes li
 * https://github.com/arthurk/argocd-example-install
 
 I found this article and repo super helpful when considering how I would structure my project, and properly employ helm.
+
+## Other useful software
+
+### Stern
+
+For multi-pod/multi-anything log tailing:
+
+- https://theiconic.tech/tail-logs-from-multiple-kubernetes-pods-the-easy-way-71401b84d7f
+- https://github.com/stern/stern
+
+Let's you do things like:
+
+```bash
+# See what's happening with your ingress
+$ stern -n ingress-nginx ingress-nginx-controller
+
+```
