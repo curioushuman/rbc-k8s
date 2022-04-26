@@ -14,7 +14,7 @@ spec:
     kustomize:
       # https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/images/
       images:
-      - curioushuman/rbc-api:latest
+      - curioushuman/rbc-api:1.1.4
   destination:
     server: https://kubernetes.default.svc
     namespace: staging
