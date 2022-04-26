@@ -6,5 +6,6 @@ targets:
 - select:
     kind: Deployment
   fieldPaths:
-  - spec.template.spec.containers.[name=mongodb].env.*.valueFrom.secretKeyRef.name
-  - spec.template.spec.containers.[name=rbc-api].env.*.valueFrom.secretKeyRef.name
+  - spec.template.spec.containers.[name=mongodb].env.[name=MONGODB_EXTRA_PASSWORDS].valueFrom.secretKeyRef.name
+  - spec.template.spec.containers.[name=mongodb].env.[name=MONGODB_ROOT_PASSWORD].valueFrom.secretKeyRef.name
+  - spec.template.spec.containers.[name=rbc-api].env.[name=RBC_MONGODB_PASSWORD].valueFrom.secretKeyRef.name
