@@ -1,0 +1,54 @@
+# Secure version of Ingress
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: argo-events-ingress
+#   namespace: argo-events
+#   annotations:
+#     cert-manager.io/cluster-issuer: letsencrypt-argocd
+#     kubernetes.io/tls-acme: "true"
+#     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+#     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: argo-events.curiouscommunities.net
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: github-eventsource-svc
+#             port:
+#               number: 12000
+#   tls:
+#   - hosts:
+#     - argo-events.curiouscommunities.net
+#     secretName: argocd-server-tls
+
+# ---
+# Insecure version of Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argo-events-ingress
+  namespace: argo-events
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    # ingress.kubernetes.io/rewrite-target: /
+    # nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: argo-events.curiouscommunities.net
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: github-eventsource-svc
+            port:
+              number: 12000
