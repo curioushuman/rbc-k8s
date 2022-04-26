@@ -22,7 +22,7 @@ metadata:
     helm.sh/chart: rbc-api-1.0.2
     app.kubernetes.io/name: rbc-api
     app.kubernetes.io/instance: rbc
-    app.kubernetes.io/version: "0.1.1"
+    app.kubernetes.io/version: "1.1.4"
     app.kubernetes.io/managed-by: Helm
 ---
 # Source: rbc-api/charts/mongodb/templates/standalone/pvc.yaml
@@ -76,7 +76,7 @@ metadata:
     app.kubernetes.io/instance: rbc
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: rbc-api
-    app.kubernetes.io/version: 0.1.1
+    app.kubernetes.io/version: 1.1.4
     helm.sh/chart: rbc-api-1.0.2
   name: rbc-rbc-api
 spec:
@@ -229,7 +229,7 @@ metadata:
     app.kubernetes.io/instance: rbc
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: rbc-api
-    app.kubernetes.io/version: 0.1.1
+    app.kubernetes.io/version: 1.1.4
     helm.sh/chart: rbc-api-1.0.2
   name: rbc-rbc-api
 spec:
@@ -266,7 +266,7 @@ spec:
               name: rbc-api-mongodb
         - name: RBC_DEBUG
           value: "true"
-        image: curioushuman/rbc-api:0.1.1
+        image: curioushuman/rbc-api:1.1.4
         imagePullPolicy: IfNotPresent
         name: rbc-api
         ports:
@@ -288,7 +288,7 @@ metadata:
     app.kubernetes.io/instance: rbc
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: rbc-api
-    app.kubernetes.io/version: 0.1.1
+    app.kubernetes.io/version: 1.1.4
     helm.sh/chart: rbc-api-1.0.2
   name: rbc-rbc-api
 spec:
