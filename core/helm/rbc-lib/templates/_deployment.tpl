@@ -7,7 +7,7 @@ metadata:
     {{- include "rbc-lib.labels" . | nindent 4 }}
   {{- include "rbc-lib.namespace" . | nindent 2 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if and (not .Values.autoscaling.enabled) .Values.replicaCount }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:

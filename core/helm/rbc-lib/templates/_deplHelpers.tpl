@@ -33,7 +33,8 @@ Env vars consistent across containers
 {{- end -}}
 {{- end -}}
 {{- end }}
-{{- if or .Values.global.debug .Values.local.debug }}
+{{- $debug := default .Values.local.debug .Values.global.debug -}}
+{{- if $debug }}
 - name: RBC_DEBUG
   value: "true"
 {{- end }}

@@ -1,14 +1,8 @@
-# Default values for rbc-auth.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-global:
-  namespaceOverride: rbc-ecosystem
-
 local:
   debug: true
 
-replicaCount: 1
+# Set to zero to ignore
+replicaCount: 0
 
 image:
   repository: curioushuman/rbc-api
@@ -47,11 +41,6 @@ ingress:
   #  - secretName: letsencrypt-rbc-secret
   #    hosts:
   #      - api.curiouscommunities.net
-
-issuer:
-  enabled: false
-  # email: "mike@curioushuman.com.au"
-  # server: "https://acme-v02.api.letsencrypt.org/directory"
 
 # Overriding DB values for mongodb
 # TODO - pull sc-db dynamically from umbrella

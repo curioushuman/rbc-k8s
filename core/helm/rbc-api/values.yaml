@@ -1,14 +1,12 @@
-# Default values for rbc-auth.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-global:
-  namespaceOverride: rbc-ecosystem
+# Must set global object
+# Just to make life in the templates a little bit less verbose
+global: {}
 
 local:
-  debug: false
+  debug: true
 
-replicaCount: 1
+# Set to zero to ignore
+replicaCount: 0
 
 image:
   repository: curioushuman/rbc-api
@@ -39,19 +37,27 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
-    - host: api.curiouscommunities.net
+    # ! Updated in kustomization
+    # - host: api.curiouscommunities.net
+    - host: rbc.dev
       paths:
         - path: /api/?(.*)
           pathType: Prefix
-  tls:
-   - secretName: letsencrypt-rbc-secret
-     hosts:
-       - api.curiouscommunities.net
+  tls: []
+  # ! Added with kustomization
+  # tls:
+  #  - secretName: letsencrypt-rbc-secret
+  #    hosts:
+  #      - api.curiouscommunities.net
 
-issuer:
-  enabled: true
-  email: "mike@curioushuman.com.au"
-  # server: "https://acme-v02.api.letsencrypt.org/directory"
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
 
 # ! Unfortunately these don't work when (nest) tests are failing
 # livenessProbe:
@@ -99,16 +105,6 @@ storageClass:
   # volumeBindingMode: "WaitForFirstConsumer"
   # reclaimPolicy: "Retain"
   # parameters: {}
-
-serviceAccount:
-  # Specifies whether a service account should be created
-  # * NOTE: currently set to FALSE
-  create: false
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
 
 imagePullSecrets: []
 nameOverride: ""

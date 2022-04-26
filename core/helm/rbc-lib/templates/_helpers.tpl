@@ -74,7 +74,6 @@ Defined port, or default to 3000
 
 {{/*
 Namespace
-TODO: deal with an empty value from global
 */}}
 {{- define "rbc-lib.namespace" -}}
 {{- if .Values.global.namespaceOverride }}
