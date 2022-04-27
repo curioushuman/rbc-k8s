@@ -27,12 +27,10 @@ server:
     # -- Service account name
     name: "argo-workflows-server-sa"
 
-
   # -- Run the argo server in "secure" mode. Configure this value instead of `--secure` in extraArgs.
   ## See the following documentation for more details on secure mode:
   ## https://argoproj.github.io/argo-workflows/tls/
   secure: true
-
 
   ## Ingress configuration.
   # ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -74,3 +72,16 @@ server:
       # - secretName: argoworkflows-example-tls
       #   hosts:
       #     - argoworkflows.example.com
+  extraArgs:
+    - --auth-mode=sso
+  sso:
+    issuer: https://argocd.curiouscommunities.net/api/dex
+    # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
+    sessionExpiry: 240h
+    clientId:
+      name: argo-workflows-sso
+      key: client-id
+    clientSecret:
+      name: argo-workflows-sso
+      key: client-secret
+    redirectUrl: https://argo-workflows.curiouscommunities.net/oauth2/callback
