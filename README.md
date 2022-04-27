@@ -360,7 +360,68 @@ It may or may not in the future, we'll need to keep an eye on it. Until then, I'
 
 - https://argoproj.github.io/argo-events/eventsources/setup/github/
 
-Most importantly create your own [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for GitHub. Give it all the permissions under the repo section.
+Most importantly create your own [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) for GitHub. Give it all the permissions under the repo section, and then add it to a sealed secret:
+
+```bash
+# Create secret, and seal it using sealed-secrets
+$ kubectl \
+  --namespace argo-events \
+  create secret generic github-access \
+  --dry-run=client \
+  --from-literal token='shhhImAToken' \
+  --output yaml \
+  | kubeseal \
+  --controller-namespace=argocd \
+  --controller-name=sealed-secrets \
+  --format yaml > ./infra/argo-events/templates/github-access.yaml
+```
+
+### Argo Workflows
+
+**Using ArgoCD for SSO**
+
+Relevant docs:
+
+- https://argoproj.github.io/argo-workflows/argo-server-sso-argocd/
+- https://argoproj.github.io/argo-workflows/argo-server-sso/
+
+They're not super helpful so, in summary:
+
+*1. Create the following secret*
+
+**Note:** Needs to exist in both namespaces.
+**Note:** Do not use the values below, come up with your own values.
+
+ ```bash
+# Create one in argo namespace (for Workflows)
+$ kubectl \
+  --namespace argo \
+  create secret generic argo-workflows-sso \
+  --dry-run=client \
+  --from-literal client-id='hT4cLvG6qwWqC7sbHzwf6kyz8' \
+  --from-literal client-secret='txtUa9GEv7fAAqCmcFCfgmbd9g2ngbiU3fWNGQCN' \
+  --output yaml \
+  | kubeseal \
+  --controller-namespace=argocd \
+  --controller-name=sealed-secrets \
+  --format yaml > ./infra/argo-workflows/templates/argo-workflows-sso.yaml
+# The exact same secret, but in the argocd namespace and chart
+$ kubectl \
+  --namespace argocd \
+  create secret generic argo-workflows-sso \
+  --dry-run=client \
+  --from-literal client-id='hT4cLvG6qwWqC7sbHzwf6kyz8' \
+  --from-literal client-secret='txtUa9GEv7fAAqCmcFCfgmbd9g2ngbiU3fWNGQCN' \
+  --output yaml \
+  | kubeseal \
+  --controller-namespace=argocd \
+  --controller-name=sealed-secrets \
+  --format yaml > ./infra/argo-cd/templates/argo-workflows-sso.yaml
+```
+
+*2. Update `values.yaml` [according to the docs](- https://argoproj.github.io/argo-workflows/argo-server-sso-argocd/)*
+
+But double check the [default values.yaml](https://artifacthub.io/packages/helm/argo/argo-workflows) file from the artifact-hub. It indicates all values under server.sso need to be in place.
 
 ## Decision: moving away from Umbrella Helm chart
 
