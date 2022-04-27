@@ -12,7 +12,7 @@ argo-workflows:
       hosts:
         - argo-workflows.curiouscommunities.net
     ## https://argoproj.github.io/argo-workflows/tls/
-    # secure: true
+    secure: true
     sso:
       issuer: https://argocd.curiouscommunities.net/api/dex
       # sessionExpiry defines how long your login is valid for in hours. (optional, default: 10h)
