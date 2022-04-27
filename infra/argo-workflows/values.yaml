@@ -1,0 +1,76 @@
+argo-workflows:
+  workflow:
+    serviceAccount:
+      create: true
+
+  server:
+    ingress:
+      enabled: true
+
+#---
+
+server:
+  # -- Server name string
+  name: server
+  # -- Service type for server pods
+  serviceType: ClusterIP
+  # -- Service port for server
+  servicePort: 2746
+  # -- Service node port
+  serviceNodePort: # 32746
+  # -- Service port name
+  servicePortName: "" # http
+
+  serviceAccount:
+    # -- Create a service account for the server
+    create: true
+    # -- Service account name
+    name: "argo-workflows-server-sa"
+
+
+  # -- Run the argo server in "secure" mode. Configure this value instead of `--secure` in extraArgs.
+  ## See the following documentation for more details on secure mode:
+  ## https://argoproj.github.io/argo-workflows/tls/
+  secure: true
+
+
+  ## Ingress configuration.
+  # ref: https://kubernetes.io/docs/user-guide/ingress/
+  ingress:
+    # -- Enable an ingress resource
+    enabled: true
+    # -- Defines which ingress controller will implement the resource
+    ingressClassName: "nginx"
+
+    # -- List of ingress hosts
+    ## Hostnames must be provided if Ingress is enabled.
+    ## Secrets must be manually created in the namespace
+    hosts:
+      - argo-workflows.curiouscommunities.net
+
+    # -- List of ingress paths
+    paths:
+      - /
+
+    # -- Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
+    pathType: Prefix
+    # -- Additional ingress paths
+    extraPaths: []
+      # - path: /*
+      #   backend:
+      #     serviceName: ssl-redirect
+      #     servicePort: use-annotation
+      ## for Kubernetes >=1.19 (when "networking.k8s.io/v1" is used)
+      # - path: /*
+      #   pathType: Prefix
+      #   backend:
+      #     service
+      #       name: ssl-redirect
+      #       port:
+      #         name: use-annotation
+
+    # -- Ingress TLS configuration
+    tls: []
+      # - secretName: argoworkflows-example-tls
+      #   hosts:
+      #     - argoworkflows.example.com
