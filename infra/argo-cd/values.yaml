@@ -24,7 +24,7 @@ argo-cd:
         - id: argo-workflows-sso
           name: Argo Workflow
           redirectURIs:
-            - https://argo-workflows.curiouscommunities.net/oauth2/callback
+            - http://argo-workflows.curiouscommunities.net/oauth2/callback
           secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
   dex:
